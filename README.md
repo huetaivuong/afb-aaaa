@@ -1,61 +1,70 @@
 ------------------------------------------------------------------------
-                  AGL-Advanced-Audio-Agent
+                  AGL-Advanced-Audio-Agent 
 ------------------------------------------------------------------------
 
 # Cloning Audio-Binding from Git
+-------------------------------------------------------
 
-```bash
+```
 # Initial clone with submodules
-git clone --recurse-submodules https://github.com/iotbzh/afb-aaaa
+git clone --recurse-submodules https://github.com/iotbzh/audio-bindings
 cd  audio-binding
 
 # Do not forget submodules with pulling
-git pull --recurse-submodules https://github.com/iotbzh/afb-aaaa
-git submodule update
+git pull --recurse-submodules https://github.com/iotbzh/audio-bindings
+
 ```
 
 # AFB-daemon dependencies
+-------------------------------------------------------
 
-OpenSuse >=42.2, Fedora>=25, Ubuntu>=16.4 AGL Binary packages installation from
-[this wiki](https://en.opensuse.org/LinuxAutomotive)
+    OpenSuse >=42.2, Fedora>=25, Ubuntu>=16.4 Binary packages from  https://en.opensuse.org/LinuxAutomotive
 
-For other distro see chapter [# Building AFB-daemon from source on Standard Linux Distribution](#Build)
+    For other distro see # Building AFB-daemon from source on Standard Linux Distribution
 
-# Specific Dependencies
+ 
+# Specific Dependencies 
 
-* alsa-devel >= 1.1.3 Warning some distro like Fedora 25 still ship version 1.1.1 as default
+ * alsa-devel >= 1.1.2 Warning some distro like Fedora-25 still ship version 1.1.1 as default
+ * lua >= 5.3  Most distribution only ship version 5.2 but binary package should be easy to find
 
-> **NOTE**: On Ubuntu 16.4 you should recompile AlsaLib from [source](ftp://ftp.alsa-project.org/pub/lib/)
-> as today latest stable is 1.1.4.
+On Ubuntu 16.4 you should recompile AlsaLib from source ftp://ftp.alsa-project.org/pub/lib/
+as today latest stable is 1.1.4. 
 
+
+```
   OpenSuse
-     - Alsa-devel ```zypper install alsa-devel # 42.3 is shipped default with 1.1.4```
+     - LUA-5.3-devel  https://software.opensuse.org//download.html?project=devel%3Alanguages%3Alua&package=lua53
+     - Alsa-devel zypper --install alsa-devel # 42.3 is shipped default with 1.1.4 
 
   Fedora 26 (out of the box)
+     - Lua 5.3 
      - Alsa-devel 1.1.4
 
   Ubuntu-16.4
+     - LUA-5.3 is avaliable in binary through apt-get
      - Alsa should be recompiled from source
-
-```bash
-wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
-tar -xjf alsa-lib-1.1.4.1.tar.bz2
-cd alsa-lib-1.1.4.1
-./configure --prefix=/opt
-```
+ 
+        wget ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
+        tar -xjf alsa-lib-1.1.4.1.tar.bz2
+        cd alsa-lib-1.1.4.1
+        ./configure --prefix=/opt
 
   Ubuntu-17.04 (out of the box)
      - Alsa 1.1.4
+     - Lua 5.3 
 
-> **WARNING**: do not forget to upgrade your PKG_CONFIG_PATH=/opt/lib/pkgconfig
-> or whatever is the place where your installed alsa.
+  #WARNING: do not forget to upgrade your PKG_CONFIG_PATH=/opt/lib/pkgconfig or whatever is the place where
+  your installed alsa/lua.
+```
+
 
 # Compile AGL-Advanced-Audio-Agent
+--------------------------------------
 
-* Edit your ~/.config/app-templates/cmake.d/00-common-userconf.cmake to reflect
- your local configuration
+* Edit your ~/.config/app-templates/cmake.d/00-common-userconf.cmake to reflect your local configuration
 
-```cmake
+```
     message(STATUS "*** Fulup Local Config For Native Linux ***")
     add_compile_options(-DNATIVE_LINUX)
 
@@ -70,7 +79,8 @@ cd alsa-lib-1.1.4.1
 
 ```
 
-```bash
+
+```
     mkdir -p build
     cd build
     cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX ..
@@ -95,7 +105,8 @@ As a result if you change your directory after binder start with --workdir=xxx t
 
 Conclusion: double-check that --workdir=. and run debug session from ./build directory. Any IDEs like Netbeans or VisualCode should work out of the box.
 
-```bash
+
+```
     Examples:
 
     # WORK when running in direct
@@ -113,7 +124,7 @@ To debug sharelib symbol path: start your binder under GDB. Then break your sess
 loaded its bindings. Finally use "info sharedlibrary" and check 'SymsRead'. If equal to 'No' then either you start GDB
 from the wrong relative directory, either you have to use 'set solib-search-path' to force the path.
 
-```bash
+```
     gdb -args afb-daemon --workdir=.. --ldpaths=build --port=1234 --roothttp=./htdocs
     run
         ...
@@ -124,9 +135,16 @@ from the wrong relative directory, either you have to use 'set solib-search-path
     info sharedlibrary afb-*
 ```
 
-# Running an debugging on a target
+# ToBeBone (WorkInProgess: This list is getting longer every day)
+-------------------------------------------------------------------
 
-```bash
+ * Allow LUA to run a shell command
+
+# Running an debugging on a target
+-------------------------------------------------------
+
+
+```
 export RSYNC_TARGET=root@xx.xx.xx.xx
 export RSYNC_PREFIX=/opt    # WARNING: installation directory should exist
 
@@ -143,85 +161,37 @@ make remote-target-populate
 ```
 
 Note: remote-target-populate will
-
-* create a script to remotely start the binder on the target in ./build/target/start-on-target-name.sh
-* create a gdbinit file to transparently debug remotely in source code with gdb -x ./build/target/gdb-on-target-name.ini
-* to run and debug directly from your IDE just configure the run and debug properties with the corresponding filename
-* run a generic control and pass virtual channel as a parameter (check remaning PCM in plugin)
+ - create a script to remotely start the binder on the target in ./build/target/start-on-target-name.sh
+ - create a gdbinit file to transparently debug remotely in source code with gdb -x ./build/target/gdb-on-target-name.ini
+ - to run and debug directly from your IDE just configure the run and debug properties with the corresponding filename
+ - run a generic control and pass virtual channel as a parameter (check remaning PCM in plugin)
 
 Note that Netbeans impose to set debug directory to ./build/pkgout or it won't find binding symbols for source debugging
 
-# <a name="Build"></a> Building AFB-daemon from source on Standard Linux Distribution
 
-## Handle dependencies using packager > (OpenSuse-42.2, Fedora-25, Ubuntu 16.04.2LTS)
+# Building AFB-daemon from source on Standard Linux Distribution
+-------------------------------------------------------
 
-Using system package repositories:
+   # handle dependencies > (OpenSuse-42.2, Fedora-25, Ubuntu 16.04.2LTS)
+    gcc > 4.8
+    systemd-devel (libsystemd-dev>=222)
+    libuuid-devel
+    file-devel(OpenSuSe) or libmagic-dev(Ubuntu)
+    libjson-c-devel
+    ElectricFence (BUG should not be mandatory)
+    libopenssl-devel libgcrypt-devel libgnutls-devel (optional but requested by libmicrohttpd for https)
 
-* gcc > 4.8
-* systemd-devel (libsystemd-dev>=222)
-* libuuid-devel (OpenSuse) or uuid-dev (Ubuntu)
-* file-devel(OpenSuSe) or libmagic-dev(Ubuntu)
-* libjson-c-devel
-* ElectricFence (BUG should not be mandatory)
-* libopenssl-devel libgcrypt-devel libgnutls-devel (optional but requested by libmicrohttpd for https)
+    OpenSuse >=42.2
+      zypper in gcc5 gdb gcc5-c++ git cmake make ElectricFence systemd-devel libopenssl-devel  libuuid-devel alsa-devel libgcrypt-devel libgnutls-devel libjson-c-devel file-devel mxml-devel
 
-Using [AGL repositories](https://en.opensuse.org/LinuxAutomotive):
+    Ubuntu >= 16.4 libuuid-devel
+      apt-get install cmake git electric-fence libsystemd-dev libssl-dev uuid-dev libasound2-dev libgcrypt20-dev libgnutls-dev libgnutls-dev libjson-c-dev libmagic-dev  libmxml-dev
 
-* libmicrohttpd>=0.9.55 (as today OpenSuse-42.2, 42.3 or Ubuntu-16.4 ship older versions)
-* afb-daemon from AGL Gerrit ```git clone https://gerrit.automotivelinux.org/gerrit/src/app-framework-binder```
+    libmicrohttpd>=0.9.55 (as today OpenSuse-42.2 or Ubuntu-.16.4 ship older versions)
+    afb-daemon from AGL Gerrit git clone https://gerrit.automotivelinux.org/gerrit/src/app-framework-binder
 
-OpenSuse >= 42.2:
-
-```bash
-export DISTRO="openSUSE_Leap_42.2"
-sudo zypper ar http://download.opensuse.org/repositories/isv:/LinuxAutomotive:/app-Framework/${DISTRO}/isv:LinuxAutomotive:app-Framework.repo
-sudo zypper ref
-#For openSUSE_Leap_42.2 gcc config
-sudo zypper install agl-gcc5-setup
-#For openSUSE_Leap_42.3 gcc config
-#sudo zypper install agl-gcc6-setup
-#Install application framework
-sudo zypper install agl-app-framework-binder
-
-# Other needed system devel packages:
-zypper in gcc5 gdb gcc5-c++ git cmake make ElectricFence systemd-devel libopenssl-devel libuuid-devel alsa-devel libgcrypt-devel libgnutls-devel libjson-c-devel file-devel mxml-devel
 ```
-
-Fedora >= 26:
-
-```bash
-export DISTRO="Fedora_26"
-sudo dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:/LinuxAutomotive:/app-Framework/${DISTRO}/isv:LinuxAutomotive:app-Framework.repo
-#Install application framework
-sudo zypper install agl-app-framework-binder
-
-# Other needed system devel packages:
-dnf install gdb git cmake make ElectricFence systemd-devel libopenssl-devel libuuid-devel alsa-devel libgcrypt-devel libgnutls-devel libjson-c-devel file-devel mxml-devel
-```
-
-Ubuntu >= 16.4:
-
-```bash
-export DISTRO="xUbuntu_16.04"
-wget -O - http://download.opensuse.org/repositories/isv:/LinuxAutomotive:/app-Framework/${DISTRO}/Release.key | sudo apt-key add -
-sudo bash -c "cat >> /etc/apt/sources.list.d/AGL.list <<EOF
-#AGL
-deb http://download.opensuse.org/repositories/isv:/LinuxAutomotive:/app-Framework/${DISTRO}/ ./
-EOF"
-sudo apt-get update
-#Install application framework
-sudo apt-get install agl-app-framework-binder
-# Or for Ubuntu 17.04
-#sudo apt-get install agl-app-framework-binder-bin
-#sudo apt-get install agl-app-framework-binder-dev
-
-# Other needed system devel packages:
-apt-get install cmake git electric-fence libsystemd-dev libssl-dev uuid-dev libasound2-dev libgcrypt20-dev libgnutls-dev libgnutls-dev libjson-c-dev libmagic-dev  libmxml-dev
-```
-
-You might want to add following variables into ~/.bashrc:
-
-```bash
+    # Might want to add following variables into ~/.bashrc
     echo "#----------  AGL options Start ---------" >>~/.bashrc
     echo "# Object: AGL cmake option for  binder/bindings" >>~/.bashrc
     echo "# Date: `date`" >>~/.bashrc
@@ -236,14 +206,7 @@ You might want to add following variables into ~/.bashrc:
 
     echo "#----------  AGL options End ---------" >>~/.bashrc
     source ~/.bashrc
-```
 
-## Handle dependencies from sources
-
-Install devel packages from your system official repositories and use the
-following instructions to install `libmicrohttpd` and `app-framework-binder`:
-
-```bash
     # install LibMicroHttpd
     LIB_MH_VERSION=0.9.55
     wget https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-${LIB_MH_VERSION}.tar.gz

@@ -9,7 +9,7 @@
     "onload": [{
             "label": "onload-default",
             "info": "onload initialisation config",
-            "require": ["alsacore","jabra-usb","intel-hda","hal-most-unicens"],
+            "require": ["alsacore","intel-hda"],
             "actions":
                     {
                         "label": "control-init",
@@ -22,26 +22,11 @@
     "controls":
             [
                 {
-                    "label": "Volume",
-                    "permissions": "urn:AGL:permission:audio:public:multimedia",
-                    "actions": {
-                        "label": "adjust-master-volume",
-                        "info" : "volume value should be provided by requesting client",
-                        "lua": "_Permament_Control",
-                        "args": {
-                            "ctl" : "Master_Playback_Volume"
-                        }
-                    }
-                },{
                     "label": "Multimedia",
                     "permissions": "urn:AGL:permission:audio:public:multimedia",
                     "actions": {
                         "label": "authorize-multimedia",
-                        "lua": "_Temporarily_Control",
-                        "args": {
-                            "ctl" : "Multimedia_Playback_Volume",
-                            "val": 80
-                        }
+                        "lua": "_Temporarily_Control"
                     }
                 }, {
                     "label": "Navigation",

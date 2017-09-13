@@ -81,17 +81,29 @@ typedef enum {
     PCM_Playback_Switch,
     Capture_Volume,
     Master_OnOff_Switch,
+
     Telephony_Playback_Volume,
     Multimedia_Playback_Switch,
     Navigation_Playback_Switch,
     Emergency_Playback_Switch,
     Telephony_Playback_Switch,
             
-
     // Application Virtual Channels
     Multimedia_Playback_Volume,
     Navigation_Playback_Volume,
     Emergency_Playback_Volume,
+
+    // AK
+    Guidance_Vol_ID,
+    Communication_Vol_ID,
+    Entertainment_Vol_ID,
+    Notification_Vol_ID,
+    Warning_Vol_ID,
+    Guidance_Vol_Ramp_ID,
+    Communication_Vol_Ramp_ID,
+    Entertainment_Vol_Ramp_ID,
+    Notification_Vol_Ramp_ID,
+    Warning_Vol_Ramp_ID,
 
    EndHalCrlTag // used to compute number of ctls
 } halCtlsTagT;

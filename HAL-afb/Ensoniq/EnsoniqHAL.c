@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016 "IoT.bzh"
- * Author Fulup Ar Foll <fulup@iot.bzh>
+ * Copyright (C) 2017 "Audiokinetic Inc"
+ * Author Francois Thibault <fthibault@audiokinetic.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- *
- * To find out which control your sound card uses
- *  aplay -l  # Check sndcard name name in between []
- *  amixer -D hw:xx controls # get supported controls
- *  amixer -D "hw:3" cget numid=xx  # get control settings
- *
  */
+
 #define _GNU_SOURCE
 #include "hal-interface.h"
 #include "audio-common.h"
+
 
 // Define few private tag for not standard functions
 //Old Softvolume
@@ -126,14 +121,14 @@ STATIC alsaHalMapT  alsaHalMap[]= {
 
 // HAL sound card mapping info
 STATIC alsaHalSndCardT alsaHalSndCard = {
-    .name = "HDA Intel PCH", //  WARNING: name MUST match with 'aplay -l'
-    .info = "Hardware Abstraction Layer for IntelHDA sound card",
+    .name = "Ensoniq AudioPCI", //  WARNING: name MUST match with 'aplay -l'
+    .info = "Hardware Abstraction Layer for Ensoniq sound card",
     .ctls = alsaHalMap,
 };
 
 STATIC int sndServiceInit() {
     int err;
-    AFB_DEBUG("IntelHal Binding Init");
+    AFB_DEBUG("Ensoniq HAL Binding Init");
 
     err = halServiceInit(afbBindingV2.api, &alsaHalSndCard);
     return err;
@@ -141,7 +136,7 @@ STATIC int sndServiceInit() {
 
 // API prefix should be unique for each snd card
 PUBLIC const struct afb_binding_v2 afbBindingV2 = {
-    .api = "intel-hda",
+    .api = "ensoniq",
     .init = sndServiceInit,
     .verbs = halServiceApi,
     .onevent = halServiceEvent,

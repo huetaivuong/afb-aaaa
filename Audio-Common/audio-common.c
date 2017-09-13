@@ -20,6 +20,12 @@
 
 PUBLIC const char *halCtlsLabels[] = {
 
+    [Vol_Ramp_Set_Mode]  = "Volume_Ramp_Mode",
+    [Vol_Ramp_Set_Delay] = "Volume_Ramp_Delay",
+    [Vol_Ramp_Set_Down]  = "Volume_Ramp_Down",
+    [Vol_Ramp_Set_Up]    = "Volume_Ramp_Up",
+    [Vol_Ramp_Set_Slave] = "Volume_Ramp_Slave",
+
     [Master_Playback_Volume] = "Master_Playback_Volume",
     [Master_OnOff_Switch] = "Master_OnOff_Switch",
     [Master_Playback_Ramp]= "Master_Playback_Ramp",
@@ -27,18 +33,19 @@ PUBLIC const char *halCtlsLabels[] = {
     [PCM_Playback_Switch] = "PCM_Playback_Switch",
     [Capture_Volume]      = "Capture_Volume",
 
-    [Vol_Ramp_Set_Mode]  = "Volume_Ramp_Mode",
-    [Vol_Ramp_Set_Delay] = "Volume_Ramp_Delay",
-    [Vol_Ramp_Set_Down]  = "Volume_Ramp_Down",
-    [Vol_Ramp_Set_Up]    = "Volume_Ramp_Up",
-    [Vol_Ramp_Set_Slave] = "Volume_Ramp_Slave",
-
     // Application Virtual Channels
     [Multimedia_Playback_Volume] = "Multimedia_Playback_Volume",
     [Navigation_Playback_Volume] = "Navigation_Playback_Volume",
     [Emergency_Playback_Volume]  = "Emergency_Playback_Volume",
     [Telephony_Playback_Volume]  = "Telephony_Playback_Volume",
     
+    // AK
+    [Guidance_Vol_ID] = "Guidance_Vol",
+    [Communication_Vol_ID] = "Communication_Vol",
+    [Entertainment_Vol_ID]  = "Entertainment_Vol",
+    [Notification_Vol_ID]  = "Notification_Vol",
+    [Warning_Vol_ID]  = "Warning_Vol",
+
     [Multimedia_Playback_Switch] = "Multimedia_Playback_Switch",
     [Navigation_Playback_Switch] = "Navigation_Playback_Switch",
     [Emergency_Playback_Switch]  = "Emergency_Playback_Switch",

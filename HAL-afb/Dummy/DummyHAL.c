@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016 "IoT.bzh"
- * Author Fulup Ar Foll <fulup@iot.bzh>
+ * Copyright (C) 2017 "Audiokinetic Inc"
+ * Author Francois Thibault <fthibault@audiokinetic.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- *
- * To find out which control your sound card uses
- *  aplay -l  # Check sndcard name name in between []
- *  amixer -D hw:xx controls # get supported controls
- *  amixer -D "hw:3" cget numid=xx  # get control settings
- *
  */
+
 #define _GNU_SOURCE
 #include "hal-interface.h"
 #include "audio-common.h"
+
 
 // Define few private tag for not standard functions
 //Old Softvolume
@@ -85,10 +80,7 @@ STATIC halVolRampT volRampWarning= {
 
 // Map HAL hight sndctl with Alsa numid and optionally with a custom callback for non Alsa supported functionalities.
 STATIC alsaHalMapT  alsaHalMap[]= {
-  { .tag=Master_Playback_Volume, .ctl={.name="Master Playback Volume", .value=100 } },
-  { .tag=PCM_Playback_Volume     , .ctl={.name="PCM Playback Volume", .value=100 } },
-  { .tag=PCM_Playback_Switch     , .ctl={.name="Master Playback Switch" } },
-  { .tag=Capture_Volume          , .ctl={.name="Capture Volume"  } },
+//   { .tag=Master_Playback_Volume, .ctl={.name="Master", .value=80 } },
 
   // Sound card does not have hardware volume ramping
   { .tag=Master_Playback_Ramp   , .cb={.callback=volumeRamp, .handle=&volRampMaster}, .info="ramp volume linearly according to current ramp setting",
@@ -126,14 +118,14 @@ STATIC alsaHalMapT  alsaHalMap[]= {
 
 // HAL sound card mapping info
 STATIC alsaHalSndCardT alsaHalSndCard = {
-    .name = "HDA Intel PCH", //  WARNING: name MUST match with 'aplay -l'
-    .info = "Hardware Abstraction Layer for IntelHDA sound card",
+    .name = "Dummy", //  WARNING: name MUST match with 'aplay -l'
+    .info = "Hardware Abstraction Layer for dummy sound card",
     .ctls = alsaHalMap,
 };
 
 STATIC int sndServiceInit() {
     int err;
-    AFB_DEBUG("IntelHal Binding Init");
+    AFB_DEBUG("Dummy HAL Binding Init");
 
     err = halServiceInit(afbBindingV2.api, &alsaHalSndCard);
     return err;
@@ -141,7 +133,7 @@ STATIC int sndServiceInit() {
 
 // API prefix should be unique for each snd card
 PUBLIC const struct afb_binding_v2 afbBindingV2 = {
-    .api = "intel-hda",
+    .api = "dummy",
     .init = sndServiceInit,
     .verbs = halServiceApi,
     .onevent = halServiceEvent,
