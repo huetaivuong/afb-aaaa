@@ -108,11 +108,11 @@ STATIC alsaHalMapT  alsaHalMap[]= {
   },
 
   // Bind with existing ones created by ALSA configuration (and linked to softvol) [0-255]
-  { .tag=Guidance_Vol_ID     , .ctl={.name="Guidance_Vol", .minval=0, .maxval=255, .step=1, .value=204 } },
-  { .tag=Entertainment_Vol_ID     , .ctl={.name="Entertainment_Vol", .minval=0, .maxval=255, .step=1, .value=204 } },
-  { .tag=Notification_Vol_ID     , .ctl={.name="Notification_Vol", .minval=0, .maxval=255, .step=1, .value=204 } },
-  { .tag=Communication_Vol_ID     , .ctl={.name="Communications_Vol", .minval=0, .maxval=255, .step=1, .value=204 } },
-  { .tag=Warning_Vol_ID     , .ctl={.name="Warning_Vol", .minval=0, .maxval=255, .step=1, .value=204 } },
+  { .tag=Guidance_Vol_ID     , .ctl={.name="Guidance_Vol", .minval=0, .maxval=100, .step=1, .value=80 } },
+  { .tag=Entertainment_Vol_ID     , .ctl={.name="Entertainment_Vol", .minval=0, .maxval=100, .step=1, .value=80 } },
+  { .tag=Notification_Vol_ID     , .ctl={.name="Notification_Vol", .minval=0, .maxval=100, .step=1, .value=80 } },
+  { .tag=Communication_Vol_ID     , .ctl={.name="Communications_Vol", .minval=0, .maxval=100, .step=1, .value=80 } },
+  { .tag=Warning_Vol_ID     , .ctl={.name="Warning_Vol", .minval=0, .maxval=100, .step=1, .value=80 } },
 
   // Could have similar controls for input  side
 

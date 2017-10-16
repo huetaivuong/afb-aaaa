@@ -118,14 +118,14 @@ STATIC alsaHalMapT  alsaHalMap[]= {
 
 // HAL sound card mapping info
 STATIC alsaHalSndCardT alsaHalSndCard = {
-    .name = "Dummy", //  WARNING: name MUST match with 'aplay -l'
-    .info = "Hardware Abstraction Layer for dummy sound card",
+    .name = "USB Audio Device", //  WARNING: name MUST match with 'aplay -l'
+    .info = "Hardware Abstraction Layer for usb sound card",
     .ctls = alsaHalMap,
 };
 
 STATIC int sndServiceInit() {
     int err;
-    AFB_DEBUG("Dummy HAL Binding Init");
+    AFB_DEBUG("USB-Audio HAL Binding Init");
 
     err = halServiceInit(afbBindingV2.api, &alsaHalSndCard);
     return err;
@@ -133,7 +133,7 @@ STATIC int sndServiceInit() {
 
 // API prefix should be unique for each snd card
 PUBLIC const struct afb_binding_v2 afbBindingV2 = {
-    .api = "dummy",
+    .api = "usbaudio",
     .init = sndServiceInit,
     .verbs = halServiceApi,
     .onevent = halServiceEvent,

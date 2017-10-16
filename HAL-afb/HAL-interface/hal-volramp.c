@@ -132,7 +132,7 @@ PUBLIC void volumeRamp(halCtlsTagT halTag, alsaHalCtlMapT *ctl, void* handle, js
             tmpJ = json_object_array_get_idx(valJ, 0);
             volRamp->mode = json_object_get_int(tmpJ);
             switch (volRamp->mode) {
-
+ 
                 case RAMP_VOL_SMOOTH:
                     volRamp->delay = 100 * 1000;
                     volRamp->stepDown = 1;
